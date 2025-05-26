@@ -82,18 +82,18 @@ EXECUTE FUNCTION trigger_set_timestamp();
 CREATE TABLE IF NOT EXISTS "sources" (
     "id" UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     "user_id" TEXT NOT NULL REFERENCES "user_profiles"("user_id") ON DELETE CASCADE,
-    "type" VARCHAR(100) NULL, -- Ej: 'website', 'book', 'article', 'video'
-    "title" TEXT NULL, -- Título de la fuente (ej. título del artículo o libro)
+    "type" VARCHAR(100) NULL,
+    "title" TEXT NULL,
     "description" TEXT NULL,
     "url" TEXT NULL,
-    "metadata" JSONB NULL, -- Para metadatos adicionales específicos del tipo de fuente
+    "link_metadata" JSONB NULL,
     "created_at" TIMESTAMPTZ DEFAULT now() NOT NULL,
     "updated_at" TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
 COMMENT ON TABLE "sources" IS 'Rastrea el origen de la información de las notas (URLs, libros, etc.).';
 COMMENT ON COLUMN "sources"."type" IS 'Tipo de fuente, ej: website, book, article, video.';
-COMMENT ON COLUMN "sources"."metadata" IS 'Metadatos adicionales en JSONB, específicos del tipo de fuente (ej. autor, ISBN para libros).';
+COMMENT ON COLUMN "sources"."link_metadata" IS 'Metadatos adicionales en JSONB, específicos del tipo de fuente (ej. autor, ISBN para libros).';
 
 
 -- Trigger para updated_at en sources

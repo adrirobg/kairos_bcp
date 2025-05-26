@@ -104,7 +104,7 @@ warn_return_any = true
 warn_unused_configs = true
 ignore_missing_imports = true # Inicialmente útil, puedes hacerlo más estricto después
 disallow_untyped_defs = true  # Fomenta la anotación de tipos en todas las funciones/métodos
-exclude = ["migrations/versions/"] # Excluye los archivos de versiones de Alembic
+exclude = ["migrations/versions/","tests/*"] # Excluye los archivos de versiones de Alembic
 files = ["src/pkm_app"]
 
 [tool.pytest.ini_options]

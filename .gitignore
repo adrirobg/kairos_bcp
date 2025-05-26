@@ -35,14 +35,12 @@ ENV/
 
 # IDE - VS Code
 .vscode/*
-.roo
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
 .history/
-.roomodes
 
 # IDE - PyCharm
 .idea/

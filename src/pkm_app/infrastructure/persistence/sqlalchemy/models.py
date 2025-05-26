@@ -85,9 +85,7 @@ class UserProfile(Base):
 
     user_id: Mapped[str] = mapped_column(Text, primary_key=True)
     name: Mapped[str | None] = mapped_column(Text, nullable=True)
-    email: Mapped[str | None] = mapped_column(
-        Text, unique=True, nullable=True, index=True
-    )
+    email: Mapped[str | None] = mapped_column(Text, unique=True, nullable=True, index=True)
     preferences: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True)
     learned_context: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
@@ -285,9 +283,7 @@ class Keyword(Base):
     # __table_args__ se usa para definir constraints a nivel de tabla
     # En este caso, la restricción UNIQUE para (user_id, name) que ya tienes en el SQL.
     # SQLAlchemy la usará también para el nombrado automático del índice.
-    __table_args__ = (
-        UniqueConstraint("user_id", "name", name="uq_keywords_user_id_name"),
-    )
+    __table_args__ = (UniqueConstraint("user_id", "name", name="uq_keywords_user_id_name"),)
 
     # Relaciones
     user: Mapped["UserProfile"] = relationship(back_populates="keywords")
@@ -340,9 +336,7 @@ class NoteLink(Base):
             "link_type",
             name="uq_note_links_source_target_user_type",
         ),
-        CheckConstraint(
-            "source_note_id <> target_note_id", name="ck_note_links_different_notes"
-        ),
+        CheckConstraint("source_note_id <> target_note_id", name="ck_note_links_different_notes"),
     )
 
     # Relaciones

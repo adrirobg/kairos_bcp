@@ -20,10 +20,12 @@ Como desarrollador en el proyecto Kairos BCP, tu principal responsabilidad es es
    - **Streamlit / FastAPI**:
      - Si trabajas en la UI (Streamlit) o en la futura API (FastAPI), asegúrate de que estas capas interactúen con el backend únicamente a través de los Casos de Uso definidos en la capa de Aplicación. No deben acceder directamente a los repositorios ni al dominio.
 
-## 3. Calidad y Estilo de Código:
-   - **Formato**: El código debe ser formateado con Black según la configuración en [`pyproject.toml`](./pyproject.toml:37).
-   - **Linting**: El código debe pasar las verificaciones de Ruff según la configuración en [`pyproject.toml`](./pyproject.toml:41). Corrige los problemas que reporte.
-   - **Tipado Estático**: Todo el código nuevo debe incluir anotaciones de tipo. Utiliza Mypy (configurado en [`pyproject.toml`](./pyproject.toml:97)) para verificar el tipado.
+## 3. Calidad y Estilo de Código (Cumplimiento Proactivo):
+   - **Objetivo Principal**: Generar código que **cumpla proactivamente** con las herramientas de calidad del proyecto desde el inicio. El objetivo es minimizar los fallos en los hooks de pre-commit y reducir la necesidad de ciclos de corrección.
+   - **Formato (Black)**: TODO el código generado debe adherirse estrictamente al formato definido por Black, según la configuración en [`pyproject.toml`](./pyproject.toml:37). Asegúrate de que tu salida final ya esté formateada.
+   - **Linting (Ruff)**: TODO el código generado debe pasar las verificaciones de Ruff, según la configuración en [`pyproject.toml`](./pyproject.toml:41). Anticipa y corrige los posibles problemas de linting antes de presentar el código.
+   - **Tipado Estático (Mypy)**: TODO el código nuevo debe incluir anotaciones de tipo completas y correctas. El código debe pasar la verificación de Mypy (configurado en [`pyproject.toml`](./pyproject.toml:97)) sin errores.
+   - **Prueba Mental Pre-Entrega**: Antes de finalizar tu intervención y entregar el código, realiza una "prueba mental" o utiliza herramientas internas (si estuvieran disponibles para ti) para asegurar que el código probablemente pasará las validaciones de `black`, `ruff` y `mypy` del proyecto.
    - **Legibilidad y Mantenibilidad**: Escribe código claro, bien comentado (en español) donde sea necesario, y fácil de entender y mantener.
    - **Principios SOLID**: Aplica los principios SOLID en tu diseño de clases y funciones.
 

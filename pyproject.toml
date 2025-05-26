@@ -28,6 +28,8 @@ dependencies = [
 requires = ["poetry-core>=2.0.0,<3.0.0"] # Esto está bien, aunque las versiones más recientes de Poetry suelen poner solo "poetry-core" o "poetry-core>=1.0.0". Lo que tienes es funcional.
 build-backend = "poetry.core.masonry.api"
 
+[tool.poetry]
+packages = [{include = "pkm_app", from = "src"}]
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
 ruff = "^0.11.11"
@@ -86,6 +88,7 @@ ignore = [ # Puedes añadir códigos de error específicos para ignorar aquí
     "F401", # Importaciones no usadas, Black no las maneja
     "F403", # Importaciones con * (Black no las maneja)
     "F405", # Importaciones de submódulos (Black no las maneja)
+    "E402", # Module level import not at top of file
 ]
 
 [tool.ruff.format]

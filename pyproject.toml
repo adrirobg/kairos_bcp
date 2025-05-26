@@ -68,6 +68,7 @@ exclude = [
     "node_modules",
     "venv",
     "migrations/versions", # A menudo los archivos autogenerados de Alembic no necesitan tanto linting
+    "src/pkm_app/tests", # Excluir directorio de tests
 ]
 
 [tool.ruff.lint]
@@ -103,10 +104,11 @@ warn_return_any = true
 warn_unused_configs = true
 ignore_missing_imports = true # Inicialmente útil, puedes hacerlo más estricto después
 disallow_untyped_defs = true  # Fomenta la anotación de tipos en todas las funciones/métodos
-exclude = ["migrations/versions/"] # Excluye los archivos de versiones de Alembic
+exclude = ["migrations/versions/","tests/*"] # Excluye los archivos de versiones de Alembic
 files = ["src/pkm_app"]
 
 [tool.pytest.ini_options]
+pythonpath = ["src"]
 log_cli = true
 log_cli_level = "INFO"
 log_cli_format = "%(asctime)s [%(levelname)8s] %(name)s: %(message)s (%(filename)s:%(lineno)s)"

@@ -98,6 +98,9 @@ generated_files/
 # Test data
 test_data/
 
+# Documentation
+docs/arquitect/*
+
 # Temporary files
 tmp/
 temp/

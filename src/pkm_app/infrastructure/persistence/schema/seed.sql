@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS "notes" (
     "content" TEXT NOT NULL,
     "type" VARCHAR(100) NULL, -- Ej: 'QuickNote', 'ArticleSummary', 'MeetingMinutes', 'Idea'
     -- "embedding" VECTOR(768) NULL, -- Se añadirá en el futuro. Dimensión según modelo (ej. 768 para text-embedding-ada-002, 1536 para otros)
-    "metadata" JSONB NULL,
+    "note_metadata" JSONB NULL,
     "created_at" TIMESTAMPTZ DEFAULT now() NOT NULL,
     "updated_at" TIMESTAMPTZ DEFAULT now() NOT NULL
 );
@@ -124,7 +124,7 @@ COMMENT ON TABLE "notes" IS 'Tabla central para almacenar las notas o unidades d
 COMMENT ON COLUMN "notes"."type" IS 'Tipo principal de la nota para categorización y comportamiento, ej: QuickNote, ArticleSummary.';
 COMMENT ON COLUMN "notes"."content" IS 'Contenido principal de la nota, podría ser Markdown, texto plano, etc.';
 -- COMMENT ON COLUMN "notes"."embedding" IS 'Vector de embedding para búsqueda semántica (se añadirá en el futuro).';
-COMMENT ON COLUMN "notes"."metadata" IS 'Metadatos adicionales en JSONB (ej. estado, prioridad, datos específicos del tipo de nota).';
+COMMENT ON COLUMN "notes"."note_metadata" IS 'Metadatos adicionales en JSONB (ej. estado, prioridad, datos específicos del tipo de nota).';
 
 -- Trigger para updated_at en notes
 CREATE OR REPLACE TRIGGER set_timestamp_notes

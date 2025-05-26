@@ -47,5 +47,4 @@ repos:
           - "google-generativeai>=0.8.5"
           - "fastapi>=0.115.12" # FastAPI usa Pydantic extensivamente.
         args: [--config-file=pyproject.toml] # Asegura que Mypy use la configuración de pyproject.toml
-        # pass_filenames: false # Considera esto si configuras Mypy en pyproject.toml para escanear todo el proyecto.
-                                # Si es true (por defecto), Mypy solo chequeará los archivos cambiados.
+        pass_filenames: false # Mypy escaneará según su config, no solo archivos cambiados.

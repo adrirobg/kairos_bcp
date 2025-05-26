@@ -1,0 +1,127 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.coverage
+htmlcov/
+.pytest_cache/
+coverage.xml
+*.cover
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.env
+.venv
+
+# IDE - VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+.history/
+
+# IDE - PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Logs
+logs/
+*.log
+
+# Database
+*.db
+*.sqlite3
+*.sqlite
+*.db-journal
+
+# Local dev configuration
+.env.local
+.env.development
+.env.test
+.env.production
+*.env
+!example.env
+
+# SQLAlchemy/Alembic
+migrations/versions/*.py
+!migrations/versions/__init__.py
+!migrations/versions/README.md
+
+# Poetry
+poetry.lock
+
+# Ruff
+.ruff_cache/
+
+# Mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Streamlit
+.streamlit/secrets.toml
+
+# FastAPI (for future implementation)
+.fastapi
+
+# Generated files
+generated_files/
+
+# Test data
+test_data/
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+.temp/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+.directory
+desktop.ini
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Specific to pgvector
+*.vec
+vector_data/
+
+# Secrets and API keys
+secrets/
+api_keys.txt
+*_key.json
+*_credentials.json
+*_token.json
+google_credentials.json

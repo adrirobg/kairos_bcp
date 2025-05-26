@@ -6,7 +6,7 @@ authors = [
     {name = "adrirobg",email = "adrirobles1991@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.13,<4.0" # Asegúrate de que tu código es compatible con Python 3.13
 dependencies = [
     "pydantic (>=2.11.5,<3.0.0)",
     "pydantic-settings (>=2.9.1,<3.0.0)",
@@ -27,6 +27,7 @@ dependencies = [
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"] # Esto está bien, aunque las versiones más recientes de Poetry suelen poner solo "poetry-core" o "poetry-core>=1.0.0". Lo que tienes es funcional.
 build-backend = "poetry.core.masonry.api"
+
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
 ruff = "^0.11.11"
@@ -34,12 +35,13 @@ mypy = "^1.15.0"
 pre-commit = "^4.2.0"
 
 [tool.black]
-line-length = 88
+line-length = 100
 target-version = ['py313'] # Asegura compatibilidad con tu versión de Python
 
 [tool.ruff]
 # Establece la longitud de línea para que coincida con Black
-line-length = 88
+line-length = 100
+# Configura Ruff para que ignore errores de estilo que Black podría cambiar
 # Habilita el fix automático para reglas que lo soporten
 fix = true
 # Excluye directorios comunes (como entornos virtuales)
@@ -78,7 +80,13 @@ exclude = [
 # ARG: flake8-unused-arguments (argumentos no usados)
 # T20: flake8-print (evitar prints en producción)
 select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM", "ARG", "T20"]
-ignore = [] # Puedes añadir códigos de error específicos para ignorar aquí
+ignore = [ # Puedes añadir códigos de error específicos para ignorar aquí
+    "E501", # Longitud de línea, Black lo maneja
+    "E203", # Espacios en slices, Black lo maneja
+    "F401", # Importaciones no usadas, Black no las maneja
+    "F403", # Importaciones con * (Black no las maneja)
+    "F405", # Importaciones de submódulos (Black no las maneja)
+]
 
 [tool.ruff.format]
 # Opcional: Ruff también puede formatear, pero si usas Black, puedes deshabilitarlo
@@ -93,5 +101,12 @@ warn_unused_configs = true
 ignore_missing_imports = true # Inicialmente útil, puedes hacerlo más estricto después
 disallow_untyped_defs = true  # Fomenta la anotación de tipos en todas las funciones/métodos
 exclude = ["migrations/versions/"] # Excluye los archivos de versiones de Alembic
+files = ["src/pkm_app"]
+
+[tool.pytest.ini_options]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(name)s: %(message)s (%(filename)s:%(lineno)s)"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 
 # --- Fin Configuración de Herramientas ---

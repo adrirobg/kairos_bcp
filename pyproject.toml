@@ -68,6 +68,7 @@ exclude = [
     "node_modules",
     "venv",
     "migrations/versions", # A menudo los archivos autogenerados de Alembic no necesitan tanto linting
+    "src/pkm_app/tests", # Excluir directorio de tests
 ]
 
 [tool.ruff.lint]
@@ -107,6 +108,7 @@ exclude = ["migrations/versions/"] # Excluye los archivos de versiones de Alembi
 files = ["src/pkm_app"]
 
 [tool.pytest.ini_options]
+pythonpath = ["src"]
 log_cli = true
 log_cli_level = "INFO"
 log_cli_format = "%(asctime)s [%(levelname)8s] %(name)s: %(message)s (%(filename)s:%(lineno)s)"

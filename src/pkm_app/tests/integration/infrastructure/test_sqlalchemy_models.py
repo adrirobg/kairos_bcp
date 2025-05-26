@@ -63,7 +63,7 @@ def engine() -> Engine:
 
 
 @pytest.fixture(scope="session")
-def tables(_engine: Engine) -> Iterator[None]:
+def tables(engine: Engine) -> Iterator[None]:
     logger.info(
         f"Checking for __init__.py in src/pkm_app: " f"{os.path.exists('src/pkm_app/__init__.py')}"
     )
@@ -89,7 +89,7 @@ def tables(_engine: Engine) -> Iterator[None]:
 
 
 @pytest.fixture(scope="function")
-def db_session(engine: Engine, _tables: None) -> Iterator[SQLAlchemySession]:
+def db_session(engine: Engine, tables: None) -> Iterator[SQLAlchemySession]:
     """
     Proporciona una sesión de base de datos transaccional para cada test.
     Los cambios se revierten después de cada test.

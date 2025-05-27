@@ -4,6 +4,8 @@ import sys  # Añadido para manipular sys.modules
 from unittest import mock
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.engine import URL
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, Session
 
 # Mockear las variables de entorno antes de que database.py las cargue
 DEFAULT_ENV_VARS = {
@@ -210,3 +212,117 @@ async def test_get_async_db_session_exception_rollbacks_and_closes(
     # en los bloques except y finally de get_async_db_session
     mock_session_instance.rollback.assert_called_once()
     mock_session_instance.close.assert_called_once()
+
+
+@pytest.fixture
+def mock_sqlalchemy_sync_creators(monkeypatch):
+    """Mockea create_engine y sessionmaker para la configuración síncrona."""
+    mock_sync_engine_creator = mock.MagicMock(spec=create_engine)
+    monkeypatch.setattr("sqlalchemy.create_engine", mock_sync_engine_creator)
+
+    mock_sync_session_maker_creator_func = mock.MagicMock(spec=sessionmaker)
+
+    mock_sync_session_local_callable = mock.Mock(spec=sessionmaker)
+    mock_sync_session_instance = mock.MagicMock(spec=Session)
+
+    # Configurar el comportamiento de la sesión mockeada
+    mock_sync_session_instance.rollback = mock.MagicMock()
+    mock_sync_session_instance.close = mock.MagicMock()
+
+    mock_sync_session_local_callable.return_value = mock_sync_session_instance
+    mock_sync_session_maker_creator_func.return_value = mock_sync_session_local_callable
+
+    monkeypatch.setattr("sqlalchemy.orm.sessionmaker", mock_sync_session_maker_creator_func)
+
+    return (
+        mock_sync_engine_creator,
+        mock_sync_session_maker_creator_func,
+        mock_sync_session_local_callable,
+        mock_sync_session_instance,
+    )
+
+
+def test_sync_database_url_construction(monkeypatch):
+    """Verifica que SYNC_DATABASE_URL_STR se construye correctamente."""
+    database = import_database_module()
+
+    expected_url = URL.create(
+        drivername="postgresql+psycopg2",
+        username=DEFAULT_ENV_VARS["DB_USER"],
+        password=DEFAULT_ENV_VARS["DB_PASSWORD"],
+        host=DEFAULT_ENV_VARS["DB_HOST"],
+        port=int(DEFAULT_ENV_VARS["DB_PORT"]),
+        database=DEFAULT_ENV_VARS["DB_NAME"],
+    ).render_as_string(hide_password=False)
+
+    assert database.SYNC_DATABASE_URL_STR == expected_url
+
+
+def test_sync_engine_creation(mock_sqlalchemy_sync_creators, monkeypatch):
+    """Verifica que create_engine se llama con la URL y echo=True."""
+    mock_sync_engine_creator, _, _, _ = mock_sqlalchemy_sync_creators
+
+    database_module = import_database_module()
+
+    mock_sync_engine_creator.assert_called_once_with(
+        database_module.SYNC_DATABASE_URL_STR, echo=True
+    )
+
+
+def test_sync_session_local_creation(mock_sqlalchemy_sync_creators, monkeypatch):
+    """Verifica que sessionmaker se llama con los parámetros correctos."""
+    mock_sync_engine_creator, mock_sync_session_maker_creator_func, _, _ = (
+        mock_sqlalchemy_sync_creators
+    )
+
+    mock_created_sync_engine = mock.MagicMock()
+    mock_sync_engine_creator.return_value = mock_created_sync_engine
+
+    import_database_module()
+
+    mock_sync_session_maker_creator_func.assert_called_once_with(
+        autocommit=False, autoflush=False, bind=mock_created_sync_engine, class_=Session
+    )
+
+
+def test_get_sync_db_session_success(mock_sqlalchemy_sync_creators, monkeypatch):
+    """Verifica que get_sync_db_session proporciona y cierra una sesión síncrona."""
+    _, _, mock_callable_sync_session_local, mock_sync_session_instance = (
+        mock_sqlalchemy_sync_creators
+    )
+
+    database_module = import_database_module()
+    monkeypatch.setattr(database_module, "SyncSessionLocal", mock_callable_sync_session_local)
+
+    retrieved_session = None
+    with database_module.get_sync_db_session() as s:
+        retrieved_session = s
+        assert s is mock_sync_session_instance
+
+    assert retrieved_session is not None
+    mock_callable_sync_session_local.assert_called_once()
+    mock_sync_session_instance.close.assert_called_once()
+    mock_sync_session_instance.rollback.assert_not_called()
+
+
+def test_get_sync_db_session_exception_rollbacks_and_closes(
+    mock_sqlalchemy_sync_creators, monkeypatch
+):
+    """Verifica que la sesión síncrona hace rollback y se cierra en caso de excepción."""
+    _, _, mock_callable_sync_session_local, mock_sync_session_instance = (
+        mock_sqlalchemy_sync_creators
+    )
+
+    database_module = import_database_module()
+    monkeypatch.setattr(database_module, "SyncSessionLocal", mock_callable_sync_session_local)
+
+    custom_exception = ValueError("Test Sync Exception")
+
+    with pytest.raises(ValueError, match="Test Sync Exception"):
+        with database_module.get_sync_db_session() as s:
+            assert s is mock_sync_session_instance
+            raise custom_exception
+
+    mock_callable_sync_session_local.assert_called_once()
+    mock_sync_session_instance.rollback.assert_called_once()
+    mock_sync_session_instance.close.assert_called_once()

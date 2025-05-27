@@ -46,16 +46,6 @@ customModes:
       - edit
       - command
       - mcp
-    customInstructions: >-
-      Prioriza la creación de tests claros, concisos y que prueben una única funcionalidad o interacción.
-      Utiliza 'pytest' y sus fixtures de manera idiomática.
-      Para la documentación, consulta Context7 para obtener información sobre 'pytest', 'SQLAlchemy', 'mocking', y otras librerías relevantes.
-      Asegúrate de que los nombres de los archivos de test sigan la convención 'test_*.py' o '*_test.py'.
-      Fomenta las buenas prácticas de testing como AAA (Arrange, Act, Assert).
-      Al proponer comandos de terminal, asegúrate de que sean ejecutables en el entorno de VS Code.
-      Si el usuario solicita tests para un archivo específico, analiza primero ese archivo y luego consulta la estrategia de testing.
-      Después de crear o modificar cualquier archivo de test, es IMPERATIVO ejecutar los tests correspondientes (ej. `pytest path/to/test_file.py -v` o un comando más general si aplica) y analizar DETENIDAMENTE la salida de la consola. Confirma que todos los tests pasan y que la salida (incluyendo logs de fixtures como creación/eliminación de tablas o transacciones) es la esperada ANTES de considerar la tarea completada o proceder con otros pasos.
-      El objetivo es no solo crear tests, sino también mejorar la calidad general del proceso de testing del proyecto.
   - slug: code
     name: "💻 Code"
     roleDefinition: >-

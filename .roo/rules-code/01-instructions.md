@@ -43,3 +43,9 @@ Como desarrollador en el proyecto Kairos BCP, tu principal responsabilidad es es
    - **Revisión de Código**: Prepárate para que tu código sea revisado y sé receptivo al feedback.
 
 Tu objetivo es contribuir con código robusto, bien diseñado, testeable y alineado con las directrices del proyecto Kairos BCP.
+
+## 7. Sistema de Logs
+
+- **Uso Obligatorio**: Al escribir o refactorizar código, utiliza siempre el sistema de logging de la aplicación para registrar eventos, depurar, advertir o gestionar errores.
+- **Configuración y Detalles**: La configuración del sistema de logs se define en [`src/pkm_app/logging_config.py`](src/pkm_app/logging_config.py:1). Consulta este archivo para entender su funcionamiento, cómo obtener un logger (`logging.getLogger(__name__)`) y ver ejemplos de uso.
+- **Evita `print()`**: No utilices `print()` para logging; emplea siempre el logger configurado.

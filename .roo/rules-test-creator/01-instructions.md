@@ -71,4 +71,4 @@ Este documento define la estrategia de testing para la aplicación Kairos BCP. E
 - **Framework Principal**: `pytest`
 - **Mocking**: `unittest.mock`
 - **Base de Datos**: PostgreSQL
-- **ORM**: SQLAlchemy (con `asyncpg` para modo asíncrono)
+- **ORM**: SQLAlchemy

@@ -21,14 +21,14 @@ customModes:
       Prioriza la corrección de errores de configuración de los hooks antes que los errores de linting/formateo en el código fuente.
       Al usar Context7, formula preguntas específicas sobre los mensajes de error o las opciones de configuración de los hooks.
       Cuando corrijas archivos de código, aplica las soluciones más idiomáticas y recomendadas.
-      El archivo de resumen final debe ser claro y accionable. Nómbralo '.roo/pre_commit_guidelines.md'.
+      Utiliza el comando 'pre-commit run --all-files' para verificar los cambios después de cada corrección.
       Confirma con el usuario antes de aplicar cambios significativos si una corrección tiene múltiples enfoques.
       El objetivo es arreglar problemas actuales y ayudar a prevenir futuros errores mediante la documentación.
   - slug: test-creator
     name: "🧪 Creador de Tests"
     roleDefinition: >-
-      Eres Roo, un Asistente Creador de Tests experto para aplicaciones Python en Visual Studio Code. Tu rol principal es asistir en la creación, mantenimiento y planificación estratégica de tests para la aplicación.
-      Generarás archivos y casos de prueba utilizando el código fuente de la aplicación (incluyendo el documento activo en VS Code) y la estrategia de testing definida. Es crucial que leas, utilices como referencia y sugieras proactivamente actualizaciones al archivo '.roo/TESTING_STRATEGY.md'.
+      Eres Roo, un Asistente Creador de Tests experto para aplicaciones Python. Tu rol principal es asistir en la creación, mantenimiento y planificación estratégica de tests para la aplicación.
+      Generarás archivos y casos de prueba utilizando el código fuente de la aplicación (incluyendo el documento activo en VS Code) y la estrategia de testing definida.
       Comprenderás el contexto global de la aplicación consultando 'README.md' y otros archivos descriptivos del proyecto. Tu responsabilidad incluye desarrollar y mantener una estrategia de testing integral y pragmática.
 
       Objetivos Clave e Implementaciones:
@@ -56,6 +56,8 @@ customModes:
       - read
       - edit
       - command
+      - mcp
+      - browser
   - slug: architect
     name: "🏗️ Architect"
     roleDefinition: >-
@@ -87,6 +89,8 @@ customModes:
     groups:
       - read
       - command # MCP mode might need to run commands to fetch documentation or resources
+      - mcp # This mode is specifically designed to interact with the MCP server
+      - browser # MCP mode might use browser capabilities to fetch documentation or resources
   - slug: ask
     name: "❓ Ask"
     roleDefinition: >-
@@ -106,6 +110,7 @@ customModes:
       - read
       - command # Orchestrator might need to trigger other tools or scripts
       - mcp # Orchestrator might interact with MCP services
+      - browser # Orchestrator might use browser capabilities to fetch documentation or resources
 
   - slug: mode-optimizer
     name: 🦘 Optimizador de Modos

@@ -1,0 +1,8 @@
+{
+  "project_name": "Kairos BCP",
+  "description": "Kairos BCP es una aplicación de Gestión de Conocimiento Personal (PKM) diseñada para permitir a los usuarios capturar, organizar, enlazar y recuperar información de manera eficiente.",
+  "version": "1.0.0",
+  "creation_date": "2025-05-28",
+  "last_updated": "2025-05-28",
+  "framework_version": "RooCode-SPARC-v1"
+}

@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Any, Optional  # Removed List and Dict
+from typing import Any, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -46,9 +46,9 @@ class NoteCreate(NoteBase):
     user_id and keyword associations are handled by application logic.
     """
 
-    # Example for future extension if keywords are passed at creation:
-    # keywords_to_associate: Optional[List[str]] = Field(default=None, description="List of keyword names or IDs to associate with the note.")
-    pass
+    keywords: list[str] | None = Field(
+        default=None, description="List of keyword names to associate with the note."
+    )
 
 
 class NoteUpdate(BaseModel):
@@ -66,7 +66,11 @@ class NoteUpdate(BaseModel):
     )
     project_id: uuid.UUID | None = Field(default=None, description="New project ID for the note.")
     source_id: uuid.UUID | None = Field(default=None, description="New source ID for the note.")
-    # Updating keywords and links is typically handled via specific endpoints/logic.
+    keywords: list[str] | None = Field(
+        default=None,
+        description="List of keyword names to associate/update for the note. Provide an empty list to remove all keywords.",
+    )
+    # Updating links is typically handled via specific endpoints/logic.
 
     model_config = ConfigDict(
         extra="forbid",

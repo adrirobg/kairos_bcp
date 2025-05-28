@@ -20,10 +20,8 @@ services:
     command:
       - "postgres"
       - "-c"
-      - "shared_buffers=256MB" # Configuración de PostgreSQL (ejemplo). Esto está bien.
+      - "shared_buffers=256MB"
     healthcheck: # Comprobación de salud para asegurar que la DB esté lista.
-      # test: ["CMD-SHELL", "pg_isready -U postgres -d kairos-st"] # Ajustado para el nuevo usuario y DB
-      # SUGERENCIA: Para mayor consistencia, usa la variable de entorno para el nombre de la base de datos.
       # El usuario 'postgres' suele ser el superusuario por defecto, y pg_isready con él
       # verifica si el servidor está aceptando conexiones, lo cual es generalmente suficiente.
       # Si ${DB_USER} es diferente de 'postgres', esta prueba no verifica que ESE usuario pueda conectar,
@@ -36,7 +34,8 @@ services:
   # Servicio de pgAdmin para gestionar PostgreSQL
   pgadmin:
     image: dpage/pgadmin4:latest
-    restart: always # Adecuado para una herramienta como pgAdmin.
+    restart: unless-stopped # Política de reinicio adecuada para desarrollo.
+    container_name: kairos-bcp-pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL} # Correcto.
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD} # Correcto.

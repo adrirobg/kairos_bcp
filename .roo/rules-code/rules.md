@@ -46,6 +46,13 @@
 4. Document performance characteristics and limitations
 5. Consider memory usage and resource constraints
 
+## Post-Modification Validation Rules
+1. After any code modification or refactoring, execute `pre-commit run --all-files`.
+2. Analyze console output from pre-commit checks.
+3. Systematically correct all reported errors.
+4. Repeat pre-commit checks until all validations pass successfully.
+5. A task is not complete until all pre-commit validations succeed.
+
 ## Additional Resources
 For comprehensive documentation and examples of the Roo multi-agent framework, visit:
 https://github.com/Mnehmos/The-Ultimate-Roo-Code-Hack-Building-a-Structured-Transparent-and-Well-Documented-AI-Team

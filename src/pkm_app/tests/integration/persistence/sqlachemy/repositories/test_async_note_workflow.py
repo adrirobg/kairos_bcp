@@ -14,7 +14,9 @@ from src.pkm_app.infrastructure.persistence.sqlalchemy.database import ASYNC_DAT
 from src.pkm_app.infrastructure.persistence.sqlalchemy.models import (
     Base,
 )  # Importa Base para asegurarte de que los modelos están registrados
-from src.pkm_app.infrastructure.persistence.sqlalchemy.unit_of_work import SQLAlchemyUnitOfWork
+from src.pkm_app.infrastructure.persistence.sqlalchemy.async_unit_of_work import (
+    AsyncSQLAlchemyUnitOfWork,
+)
 from src.pkm_app.core.application.dtos import (
     NoteCreate,
     NoteSchema,
@@ -26,6 +28,7 @@ from src.pkm_app.infrastructure.persistence.sqlalchemy.models import (
 from src.pkm_app.infrastructure.persistence.sqlalchemy.models import (
     Note as NoteModel,
 )  # Para verificar directamente si es necesario
+
 
 # --- Fixtures de Pytest ---
 
@@ -69,14 +72,14 @@ async def db_transactional_session(test_engine_instance) -> AsyncIterator[AsyncS
 
 
 @pytest_asyncio.fixture
-async def uow(db_transactional_session: AsyncSession) -> SQLAlchemyUnitOfWork:
+async def uow(db_transactional_session: AsyncSession) -> AsyncSQLAlchemyUnitOfWork:
     """
-    Fixture que proporciona una instancia de SQLAlchemyUnitOfWork.
+    Fixture que proporciona una instancia de AsyncSQLAlchemyUnitOfWork.
     Utiliza una fábrica de sesiones que devuelve la sesión transaccional de prueba.
     """
     # Esta fábrica asegura que la UoW use la sesión de prueba gestionada por db_transactional_session
     test_session_factory = lambda: db_transactional_session
-    uow_instance = SQLAlchemyUnitOfWork(session_factory=test_session_factory)
+    uow_instance = AsyncSQLAlchemyUnitOfWork(session_factory=test_session_factory)
     return uow_instance
 
 
@@ -103,7 +106,7 @@ async def test_user(db_transactional_session: AsyncSession) -> UserProfileModel:
 
 @pytest.mark.asyncio
 async def test_create_and_retrieve_note_with_uow(
-    uow: SQLAlchemyUnitOfWork, test_user: UserProfileModel
+    uow: AsyncSQLAlchemyUnitOfWork, test_user: UserProfileModel
 ):
     """
     Test para crear una nota usando la UoW y el NoteRepository,
@@ -169,11 +172,3 @@ async def test_create_and_retrieve_note_with_uow(
     # Verificar metadatos de la nota recuperada
     assert retrieved_note_schema.note_metadata is not None
     assert retrieved_note_schema.note_metadata.get("status") == "draft"
-
-    # (Opcional) Verificar directamente en la base de datos si es necesario para una depuración más profunda
-    # async with uow._session_factory() as direct_session: # Acceso a una sesión para verificación
-    #    stmt = select(NoteModel).where(NoteModel.id == note_id_created)
-    #    result = await direct_session.execute(stmt)
-    #    db_note = result.scalar_one_or_none()
-    #    assert db_note is not None
-    #    assert db_note.title == note_create_data.title

@@ -1,51 +1,77 @@
-from abc import ABC, abstractmethod
-from collections.abc import AsyncIterator  # Para el contexto asíncrono
-from types import TracebackType  # Para __aexit__
-from typing import Optional
+from abc import abstractmethod
+from typing import Any, Protocol, TypeVar, runtime_checkable
 
-# Importar la interfaz del repositorio de notas
-# Asumiendo que renombraste el archivo a note_interfaces.py o similar
-from src.pkm_app.core.application.interfaces.note_interface import AbstractNoteInterface
+# Importar las interfaces de repositorio específicas
+from .note_async_interface import INoteRepository
+from .note_sync_interface import ISyncNoteRepository
 
-# Cuando tengas más repositorios, los importarás aquí también:
-# from src.pkm_app.core.application.ports.keyword_interfaces import AbstractKeywordRepository
-# from src.pkm_app.core.application.ports.project_interfaces import AbstractProjectRepository
+RepoType = TypeVar("RepoType", covariant=True)
 
 
-class AbstractUnitOfWork(ABC):
+@runtime_checkable
+class IRepository(
+    Protocol[RepoType]
+):  # Esta interfaz genérica puede mantenerse si es útil en otros contextos
     """
-    Interfaz abstracta para la Unidad de Trabajo (Unit of Work).
-    Define el contrato para gestionar transacciones y acceder a los repositorios.
+    Interfaz base para repositorios.
     """
 
-    notes: AbstractNoteInterface
-    # keywords: AbstractKeywordRepository # Ejemplo para futuro
-    # projects: AbstractProjectRepository # Ejemplo para futuro
+    pass
+
+
+@runtime_checkable
+class IAsyncUnitOfWork(Protocol):
+    """
+    Interfaz para el patrón Unit of Work asíncrono.
+    """
+
+    notes: INoteRepository  # Repositorio de notas asíncrono
 
     @abstractmethod
-    async def __aenter__(self) -> "AbstractUnitOfWork":
-        """Método para entrar en el gestor de contexto asíncrono."""
-        raise NotImplementedError
+    async def __aenter__(self) -> "IAsyncUnitOfWork":
+        """Entra en el contexto asíncrono."""
+        ...
 
     @abstractmethod
-    async def __aexit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        traceback: TracebackType | None,
-    ) -> None:
-        """
-        Método para salir del gestor de contexto asíncrono.
-        Manejará el rollback si ocurrió una excepción.
-        """
-        raise NotImplementedError
+    async def __aexit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+        """Sale del contexto asíncrono, manejando excepciones y rollback si es necesario."""
+        ...
 
     @abstractmethod
     async def commit(self) -> None:
-        """Confirma la transacción actual."""
-        raise NotImplementedError
+        """Confirma las transacciones pendientes (versión asíncrona)."""
+        ...
 
     @abstractmethod
     async def rollback(self) -> None:
-        """Revierte la transacción actual."""
-        raise NotImplementedError
+        """Revierte las transacciones pendientes (versión asíncrona)."""
+        ...
+
+
+@runtime_checkable
+class ISyncUnitOfWork(Protocol):
+    """
+    Interfaz para el patrón Unit of Work síncrono.
+    """
+
+    notes: ISyncNoteRepository  # Repositorio de notas síncrono
+
+    @abstractmethod
+    def __enter__(self) -> "ISyncUnitOfWork":
+        """Entra en el contexto síncrono."""
+        ...
+
+    @abstractmethod
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+        """Sale del contexto síncrono, manejando excepciones y rollback si es necesario."""
+        ...
+
+    @abstractmethod
+    def sync_commit(self) -> None:
+        """Confirma las transacciones pendientes (versión síncrona)."""
+        ...
+
+    @abstractmethod
+    def sync_rollback(self) -> None:
+        """Revierte las transacciones pendientes (versión síncrona)."""
+        ...

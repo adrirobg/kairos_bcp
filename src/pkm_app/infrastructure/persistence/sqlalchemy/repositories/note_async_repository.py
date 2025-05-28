@@ -1,18 +1,6 @@
-# Cómo Usar AsyncSessionLocal (Ejemplo Básico):
-# En algún lugar de tu código de aplicación (ej. un repositorio o servicio)
-# from .database import AsyncSessionLocal
-# from .models import Note # Asumiendo que Note es un modelo SQLAlchemy
-
-"""async def create_new_note(title: str, content: str):
-async with AsyncSessionLocal() as session:
-    async with session.begin(): # Inicia una transacción
-        new_note = Note(title=title, content=content, user_id="some_user_id") # Asigna user_id etc.
-        session.add(new_note)
-        # No necesitas session.commit() aquí si usas 'async with session.begin()'
-        # El bloque 'begin()' maneja el commit/rollback.
-    await session.refresh(new_note) # Para obtener campos generados por la BD como el id
-    return new_note"""
-# src/pkm_app/infrastructure/persistence/sqlalchemy/repositories.py
+# ---------------------------------------------------------------------------
+# Archivo: src/pkm_app/infrastructure/persistence/sqlalchemy/repositories/note_async_repository.py
+# ---------------------------------------------------------------------------
 
 import uuid
 from collections.abc import Sequence
@@ -28,7 +16,7 @@ from sqlalchemy.orm import joinedload, selectinload
 from src.pkm_app.core.application.dtos import NoteCreate, NoteSchema, NoteUpdate
 
 # Interfaz del Repositorio
-from src.pkm_app.core.application.interfaces.note_interface import AbstractNoteInterface
+from src.pkm_app.core.application.interfaces.note_async_interface import INoteRepository
 from src.pkm_app.infrastructure.persistence.sqlalchemy.models import (
     Keyword as KeywordModel,
 )
@@ -48,7 +36,7 @@ from src.pkm_app.infrastructure.persistence.sqlalchemy.models import (
 )
 
 
-class SQLAlchemyNoteRepository(AbstractNoteInterface):
+class AsyncSQLAlchemyNoteRepository(INoteRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
@@ -75,9 +63,6 @@ class SQLAlchemyNoteRepository(AbstractNoteInterface):
 
         # Eliminar keywords actuales de la nota para luego añadir los nuevos
         note_instance.keywords.clear()
-        # Un flush puede ser necesario aquí si la relación es compleja o para
-        # asegurar que la BD refleja el clear antes de añadir nuevos.
-        # await self.session.flush()
 
         if not keyword_names:  # Si la lista está vacía, se eliminan todos los keywords
             return
@@ -98,8 +83,6 @@ class SQLAlchemyNoteRepository(AbstractNoteInterface):
                 # Crear keyword si no existe
                 keyword_instance = KeywordModel(user_id=user_id, name=name)
                 self.session.add(keyword_instance)
-                # Un flush podría ser necesario para que el keyword_instance obtenga su ID si se
-                # necesita inmediatamente, pero para añadir a la relación, SQLAlchemy lo maneja.
             final_keywords.append(keyword_instance)
 
         note_instance.keywords.extend(final_keywords)
@@ -133,9 +116,8 @@ class SQLAlchemyNoteRepository(AbstractNoteInterface):
             project_stmt = select(ProjectModel.id).where(
                 ProjectModel.id == note_in.project_id, ProjectModel.user_id == user_id
             )
-            project_exists = (await self.session.execute(project_stmt)).scalar_one_or_none()
-            if not project_exists:
-                # Aquí podrías lanzar una excepción específica o manejar el error como prefieras
+            project_exists = await self.session.execute(project_stmt)
+            if not project_exists.scalar_one_or_none():
                 raise ValueError(
                     f"Proyecto con id {note_in.project_id} no encontrado para el usuario."
                 )
@@ -144,15 +126,13 @@ class SQLAlchemyNoteRepository(AbstractNoteInterface):
             source_stmt = select(SourceModel.id).where(
                 SourceModel.id == note_in.source_id, SourceModel.user_id == user_id
             )
-            source_exists = (await self.session.execute(source_stmt)).scalar_one_or_none()
-            if not source_exists:
+            source_exists = await self.session.execute(source_stmt)
+            if not source_exists.scalar_one_or_none():
                 raise ValueError(
                     f"Fuente con id {note_in.source_id} no encontrada para el usuario."
                 )
 
         # Crear la instancia del modelo NoteModel
-        # Los campos no presentes en note_in (como created_at, updated_at, id)
-        # serán manejados por los defaults de la BD o de SQLAlchemy.
         db_note_data = note_in.model_dump(
             exclude_unset=True, exclude={"keywords"}
         )  # Excluir keywords del dump inicial
@@ -187,15 +167,15 @@ class SQLAlchemyNoteRepository(AbstractNoteInterface):
                 project_stmt = select(ProjectModel.id).where(
                     ProjectModel.id == value, ProjectModel.user_id == user_id
                 )
-                project_exists = (await self.session.execute(project_stmt)).scalar_one_or_none()
-                if not project_exists:
+                project_exists = await self.session.execute(project_stmt)
+                if not project_exists.scalar_one_or_none():
                     raise ValueError(f"Proyecto con id {value} no encontrado para el usuario.")
             elif field == "source_id" and value is not None:
                 source_stmt = select(SourceModel.id).where(
                     SourceModel.id == value, SourceModel.user_id == user_id
                 )
-                source_exists = (await self.session.execute(source_stmt)).scalar_one_or_none()
-                if not source_exists:
+                source_exists = await self.session.execute(source_stmt)
+                if not source_exists.scalar_one_or_none():
                     raise ValueError(f"Fuente con id {value} no encontrada para el usuario.")
             setattr(note_instance, field, value)
 
@@ -215,9 +195,7 @@ class SQLAlchemyNoteRepository(AbstractNoteInterface):
         return NoteSchema.model_validate(note_instance)
 
     async def delete(self, note_id: uuid.UUID, user_id: str) -> bool:
-        note_instance = await self._get_note_instance(
-            note_id, user_id
-        )  # Usar _get_note_instance para asegurar que pertenece al usuario
+        note_instance = await self._get_note_instance(note_id, user_id)
         if note_instance:
             await self.session.delete(note_instance)
             await self.session.flush()
@@ -294,11 +272,9 @@ class SQLAlchemyNoteRepository(AbstractNoteInterface):
 
     async def search_by_keyword_names(
         self,
-        keyword_names: list[
-            str
-        ],  # Cambiado de Sequence[str] a list[str] para coincidir con interfaz
-        project_id: uuid.UUID,  # Hecho no opcional y reordenado
-        user_id: str,  # Reordenado
+        keyword_names: list[str],
+        project_id: uuid.UUID,
+        user_id: str,
         skip: int = 0,
         limit: int = 20,
     ) -> list[NoteSchema]:
@@ -310,8 +286,6 @@ class SQLAlchemyNoteRepository(AbstractNoteInterface):
             KeywordModel.name.in_(keyword_names),
             NoteModel.project_id == project_id,  # project_id ya no es opcional
         ]
-        # if project_id is not None: # Esta comprobación ya no es necesaria
-        #     filters.append(NoteModel.project_id == project_id)
 
         stmt = (
             select(NoteModel)

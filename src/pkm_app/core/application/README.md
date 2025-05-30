@@ -13,7 +13,7 @@ This sub-layer is responsible for:
 
 * **`use_cases/`**: Contains classes that implement specific application functionalities (e.g., `CreateNoteUseCase`, `SearchNotesUseCase`). These orchestrate interactions with domain entities and repositories.
 * **`dtos/`**: Holds Pydantic models used as Data Transfer Objects for passing structured data between layers, particularly between this `application` layer and the `infrastructure` (UI/API adapters).
-* **`ports/`**: Defines the abstract interfaces (contracts) for operations that depend on external factors, most notably repository interfaces (e.g., `NoteRepositoryInterface`) which dictate how data should be fetched or stored.
+* **`interfaces/`**: Defines the abstract interfaces (contracts) for operations that depend on external factors, most notably repository interfaces (e.g., `NoteRepositoryInterface`) which dictate how data should be fetched or stored.
 
 ## Interactions
 

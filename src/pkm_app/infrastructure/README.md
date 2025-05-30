@@ -10,7 +10,6 @@ This layer is where technologies are chosen and implemented. It is the most vola
 
 * **`persistence/`**: Contains adaptors for data storage, including SQLAlchemy models, repository implementations for PostgreSQL/pgvector, and database migration scripts (Alembic).
 * **`web/`**: Holds adaptors for web interfaces, including views for the Streamlit UI and routers/schemas for the future FastAPI/Flask API.
-* **`search/`**: May contain specialized adaptors for interacting with search technologies like pgvector, if the logic extends beyond simple repository methods.
 * **`config/`**: Manages application configuration loading and validation (e.g., using Pydantic BaseSettings).
 
 ## Interactions

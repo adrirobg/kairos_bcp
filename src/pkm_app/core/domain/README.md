@@ -12,7 +12,7 @@ This sub-layer contains:
 ## Key Components
 
 * **`entities/`**: Directory containing Pydantic models that define the structure and validation rules for domain entities (e.g., `note.py`, `link.py`).
-* **`value_objects/`**: Directory for Pydantic models representing value objects (e.g., `embedding.py`).
+* **`value_objects/`**: Directory for Pydantic models representing value objects (e.g., `note.py`).
 * **`services/`**: Directory for domain services (e.g., `linking_service.py` for complex link consistency logic).
 
 ## Interactions

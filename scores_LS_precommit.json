@@ -1,0 +1,84 @@
+{
+  "layer": "LS_precommit",
+  "timestamp": "2025-05-30T18:00:56+02:00",
+  "aggregate_scores": {
+    "overall": 68.5,
+    "complexity": 70.0,
+    "coverage": 75.0,
+    "performance": 80.0,
+    "correctness": 60.0,
+    "security": 65.0
+  },
+  "delta": {
+    "overall": null,
+    "complexity": null,
+    "coverage": null,
+    "performance": null,
+    "correctness": null,
+    "security": null
+  },
+  "thresholds": {
+    "epsilon": 3.0,
+    "complexity_max": 15,
+    "coverage_min": 80,
+    "performance_target": 85
+  },
+  "decision": "continue_reflection",
+  "detailed_metrics": {
+    "reflection_LS_precommit": {
+      "id": "LS_precommit_1",
+      "complexity": {
+        "cyclomatic": 13,
+        "cognitive": 10,
+        "maintainability_index": 68
+      },
+      "coverage": {
+        "estimated_line": 75,
+        "estimated_branch": 65,
+        "testability_score": 70
+      },
+      "performance": {
+        "algorithm_efficiency": 80,
+        "resource_usage": 80,
+        "scalability": 80
+      },
+      "correctness": {
+        "syntax_validity": 95,
+        "logic_consistency": 60,
+        "edge_case_handling": 55
+      },
+      "security": {
+        "vulnerability_score": 65,
+        "input_validation": 60,
+        "secure_coding_practices": 70
+      },
+      "critical_issues": [
+        {
+          "type": "Exception Handling",
+          "severity": "high",
+          "description": "Uso incorrecto de raise ... from err dificulta el rastreo de errores.",
+          "locations": [
+            "src/pkm_app/core/application/use_cases/note/create_note_use_case.py:99"
+          ]
+        },
+        {
+          "type": "Typing Errors",
+          "severity": "high",
+          "description": "Métodos asíncronos sobrescritos retornan tipos incompatibles con la interfaz.",
+          "locations": [
+            "src/pkm_app/infrastructure/persistence/sqlalchemy/repositories/user_profile_repository.py:41"
+          ]
+        },
+        {
+          "type": "Obsolete Typing",
+          "severity": "medium",
+          "description": "Uso de Dict, List, Set de typing en vez de tipos nativos.",
+          "locations": [
+            "src/pkm_app/core/domain/entities/note.py:5",
+            "src/pkm_app/infrastructure/persistence/sqlalchemy/repositories/project_repository.py:3"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -5,6 +5,7 @@ import uuid
 from collections.abc import Iterator
 
 import pytest
+import pytest_asyncio
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
@@ -17,7 +18,7 @@ from sqlalchemy.orm import sessionmaker
 # for Mypy and Pytest to be configured to find packages in 'src' directory directly
 # (e.g. via mypy_path = "src" in pyproject.toml and pytest's src-layout support).
 # sys.path.append(os.getcwd())
-from pkm_app.infrastructure.persistence.sqlalchemy.models import (
+from src.pkm_app.infrastructure.persistence.sqlalchemy.models import (
     Keyword,
     Note,
     NoteLink,
@@ -52,7 +53,7 @@ SYNC_DATABASE_URL = f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{d
 logger.info(f"Usando base de datos real: {SYNC_DATABASE_URL}")
 
 
-@pytest.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session")
 def engine() -> Engine:
     """Crea un engine de SQLAlchemy para toda la sesión de tests."""
     # Usar una base de datos de test separada si es posible, ej. agregando _test al nombre
@@ -62,7 +63,7 @@ def engine() -> Engine:
     )  # echo=False para no ensuciar output de tests
 
 
-@pytest.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session")
 def tables(engine: Engine) -> Iterator[None]:
     logger.info(
         f"Checking for __init__.py in src/pkm_app: " f"{os.path.exists('src/pkm_app/__init__.py')}"
@@ -88,7 +89,7 @@ def tables(engine: Engine) -> Iterator[None]:
     logger.info("NO se crean ni eliminan tablas (usando base de datos real).")
 
 
-@pytest.fixture(scope="function")
+@pytest_asyncio.fixture(scope="session")
 def db_session(engine: Engine, tables: None) -> Iterator[SQLAlchemySession]:
     """
     Proporciona una sesión de base de datos transaccional para cada test.

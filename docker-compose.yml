@@ -45,5 +45,14 @@ services:
       db:
         condition: service_healthy
 
+  qdrant:
+    image: qdrant/qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+
+
 volumes:
   kairos_db_data: # Volumen para persistir los datos de PostgreSQL (nombre actualizado). Correcto.
+  qdrant_storage: # Volumen para persistir los datos de Qdrant (nombre actualizado). Correcto.

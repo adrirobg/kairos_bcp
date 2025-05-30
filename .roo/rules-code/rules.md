@@ -185,6 +185,8 @@ The Auto-Coder employs several strategies for effective implementation:
    - Collaborate with TDD mode for specialized test creation and validation
    - Follow red-green-refactor cycle for methodical development
    - Leverage test specifications from TDD mode as implementation contracts
+   - Always use poetry run pytest to execute tests
+   - Ensure all tests pass before finalizing implementation
 
 2. **Incremental Development**
    - Implement core functionality first

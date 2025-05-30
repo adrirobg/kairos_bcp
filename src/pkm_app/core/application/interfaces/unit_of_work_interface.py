@@ -1,77 +1,50 @@
 from abc import abstractmethod
 from typing import Any, Protocol, TypeVar, runtime_checkable
 
-# Importar las interfaces de repositorio específicas
-from .note_async_interface import INoteRepository
-from .note_sync_interface import ISyncNoteRepository
+from .keyword_interface import IKeywordRepository
+
+# Importar las interfaces de repositorio
+from .note_interface import INoteRepository
+from .note_link_interface import INoteLinkRepository
+from .project_interface import IProjectRepository
+from .source_interface import ISourceRepository
 
 RepoType = TypeVar("RepoType", covariant=True)
 
 
 @runtime_checkable
-class IRepository(
-    Protocol[RepoType]
-):  # Esta interfaz genérica puede mantenerse si es útil en otros contextos
-    """
-    Interfaz base para repositorios.
-    """
+class IRepository(Protocol[RepoType]):
+    """Interfaz base para repositorios."""
 
     pass
 
 
 @runtime_checkable
-class IAsyncUnitOfWork(Protocol):
-    """
-    Interfaz para el patrón Unit of Work asíncrono.
-    """
+class IUnitOfWork(Protocol):
+    """Interfaz para el patrón Unit of Work."""
 
-    notes: INoteRepository  # Repositorio de notas asíncrono
+    notes: INoteRepository
+    keywords: IKeywordRepository
+    projects: IProjectRepository
+    sources: ISourceRepository
+    note_links: INoteLinkRepository
 
     @abstractmethod
-    async def __aenter__(self) -> "IAsyncUnitOfWork":
+    async def __aenter__(self) -> "IUnitOfWork":
         """Entra en el contexto asíncrono."""
         ...
 
     @abstractmethod
     async def __aexit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
-        """Sale del contexto asíncrono, manejando excepciones y rollback si es necesario."""
+        """Sale del contexto, manejando excepciones y rollback si es necesario."""
         ...
 
     @abstractmethod
     async def commit(self) -> None:
-        """Confirma las transacciones pendientes (versión asíncrona)."""
+        """Confirma las transacciones pendientes."""
         ...
 
     @abstractmethod
     async def rollback(self) -> None:
-        """Revierte las transacciones pendientes (versión asíncrona)."""
-        ...
-
-
-@runtime_checkable
-class ISyncUnitOfWork(Protocol):
-    """
-    Interfaz para el patrón Unit of Work síncrono.
-    """
-
-    notes: ISyncNoteRepository  # Repositorio de notas síncrono
-
-    @abstractmethod
-    def __enter__(self) -> "ISyncUnitOfWork":
-        """Entra en el contexto síncrono."""
-        ...
-
-    @abstractmethod
-    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
-        """Sale del contexto síncrono, manejando excepciones y rollback si es necesario."""
-        ...
-
-    @abstractmethod
-    def sync_commit(self) -> None:
-        """Confirma las transacciones pendientes (versión síncrona)."""
-        ...
-
-    @abstractmethod
-    def sync_rollback(self) -> None:
-        """Revierte las transacciones pendientes (versión síncrona)."""
+        """Revierte las transacciones pendientes."""
         ...

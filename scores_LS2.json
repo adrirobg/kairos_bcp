@@ -1,0 +1,197 @@
+{
+  "layer": "LS2",
+  "timestamp": "2025-05-30T17:39:03+02:00",
+  "aggregate_scores": {
+    "overall": 87.2,
+    "complexity": 80.5,
+    "coverage": 92.0,
+    "performance": 83.0,
+    "correctness": 90.0,
+    "security": 88.0
+  },
+  "delta": {
+    "overall": 3.5,
+    "complexity": 2.2,
+    "coverage": 2.0,
+    "performance": 2.5,
+    "correctness": 2.8,
+    "security": 2.0
+  },
+  "thresholds": {
+    "epsilon": 3.0,
+    "complexity_max": 15,
+    "coverage_min": 80,
+    "performance_target": 85
+  },
+  "decision": "proceed_to_code",
+  "detailed_metrics": {
+    "create_note_use_case": {
+      "id": "LS2_1",
+      "complexity": {
+        "cyclomatic": 10,
+        "cognitive": 7,
+        "maintainability_index": 78
+      },
+      "coverage": {
+        "estimated_line": 95,
+        "estimated_branch": 90,
+        "testability_score": 90
+      },
+      "performance": {
+        "algorithm_efficiency": 82,
+        "resource_usage": 80,
+        "scalability": 85
+      },
+      "correctness": {
+        "syntax_validity": 100,
+        "logic_consistency": 90,
+        "edge_case_handling": 88
+      },
+      "security": {
+        "vulnerability_score": 90,
+        "input_validation": 88,
+        "secure_coding_practices": 88
+      }
+    },
+    "update_note_use_case": {
+      "id": "LS2_2",
+      "complexity": {
+        "cyclomatic": 11,
+        "cognitive": 8,
+        "maintainability_index": 75
+      },
+      "coverage": {
+        "estimated_line": 93,
+        "estimated_branch": 88,
+        "testability_score": 88
+      },
+      "performance": {
+        "algorithm_efficiency": 80,
+        "resource_usage": 78,
+        "scalability": 82
+      },
+      "correctness": {
+        "syntax_validity": 100,
+        "logic_consistency": 88,
+        "edge_case_handling": 85
+      },
+      "security": {
+        "vulnerability_score": 88,
+        "input_validation": 86,
+        "secure_coding_practices": 87
+      }
+    },
+    "delete_note_use_case": {
+      "id": "LS2_3",
+      "complexity": {
+        "cyclomatic": 9,
+        "cognitive": 6,
+        "maintainability_index": 80
+      },
+      "coverage": {
+        "estimated_line": 92,
+        "estimated_branch": 87,
+        "testability_score": 87
+      },
+      "performance": {
+        "algorithm_efficiency": 83,
+        "resource_usage": 81,
+        "scalability": 84
+      },
+      "correctness": {
+        "syntax_validity": 100,
+        "logic_consistency": 89,
+        "edge_case_handling": 87
+      },
+      "security": {
+        "vulnerability_score": 89,
+        "input_validation": 87,
+        "secure_coding_practices": 88
+      }
+    },
+    "get_note_use_case": {
+      "id": "LS2_4",
+      "complexity": {
+        "cyclomatic": 8,
+        "cognitive": 6,
+        "maintainability_index": 82
+      },
+      "coverage": {
+        "estimated_line": 94,
+        "estimated_branch": 89,
+        "testability_score": 89
+      },
+      "performance": {
+        "algorithm_efficiency": 84,
+        "resource_usage": 82,
+        "scalability": 85
+      },
+      "correctness": {
+        "syntax_validity": 100,
+        "logic_consistency": 90,
+        "edge_case_handling": 88
+      },
+      "security": {
+        "vulnerability_score": 90,
+        "input_validation": 88,
+        "secure_coding_practices": 89
+      }
+    },
+    "list_notes_use_case": {
+      "id": "LS2_5",
+      "complexity": {
+        "cyclomatic": 10,
+        "cognitive": 7,
+        "maintainability_index": 79
+      },
+      "coverage": {
+        "estimated_line": 92,
+        "estimated_branch": 86,
+        "testability_score": 87
+      },
+      "performance": {
+        "algorithm_efficiency": 85,
+        "resource_usage": 83,
+        "scalability": 86
+      },
+      "correctness": {
+        "syntax_validity": 100,
+        "logic_consistency": 89,
+        "edge_case_handling": 87
+      },
+      "security": {
+        "vulnerability_score": 89,
+        "input_validation": 87,
+        "secure_coding_practices": 88
+      }
+    },
+    "search_notes_by_project_use_case": {
+      "id": "LS2_6",
+      "complexity": {
+        "cyclomatic": 12,
+        "cognitive": 8,
+        "maintainability_index": 76
+      },
+      "coverage": {
+        "estimated_line": 91,
+        "estimated_branch": 85,
+        "testability_score": 86
+      },
+      "performance": {
+        "algorithm_efficiency": 83,
+        "resource_usage": 80,
+        "scalability": 84
+      },
+      "correctness": {
+        "syntax_validity": 100,
+        "logic_consistency": 88,
+        "edge_case_handling": 86
+      },
+      "security": {
+        "vulnerability_score": 88,
+        "input_validation": 86,
+        "secure_coding_practices": 87
+      }
+    }
+  }
+}

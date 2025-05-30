@@ -9,8 +9,8 @@ This module handles the "how" of data persistence, translating requests from the
 ## Key Components
 
 * **`sqlalchemy/`**:
-    * `models.py`: Defines SQLAlchemy ORM models that map to the database tables.
-    * `repositories.py`: Contains concrete implementations of the repository interfaces (e.g., `SQLAlchemyNoteRepositoryImpl`) using SQLAlchemy to interact with PostgreSQL and pgvector for CRUD operations and vector searches.
+    * `models/`: Defines SQLAlchemy ORM models that map to the database tables.
+    * `repositories/: Contains concrete implementations of the repository interfaces (e.g., `SQLAlchemyNoteRepositoryImpl`) using SQLAlchemy to interact with PostgreSQL and pgvector for CRUD operations and vector searches.
     * `database.py`: Handles database connection setup, session management, and engine configuration.
 * **`migrations/`**: Contains database migration scripts managed by Alembic, allowing for version-controlled evolution of the database schema.
 
